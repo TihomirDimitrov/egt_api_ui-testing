@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TestSuite">
+    <parameter name="env" value="dev"/>
+
+    <test name="Create User Test">
+        <classes>
+            <class name="tests.api.CreateUserTest"/>
+        </classes>
+    </test>
+</suite>

@@ -97,29 +97,8 @@ mvn test -Denv=test
     - Статус код 201.
     - Проверка на полетата `name`, `job`, `id`, и `createdAt`.
 
-```java
-@Test
-@Parameters({"env"})
-public void createUserSuccessfullyTest(String env) {
-    // Зареждане на конфигурации и request body
-    String requestBody = FileUtils.readFileAsString(baseRequestBodyPath + "createUserRequest.json");
-    
-    RestAssured
-        .given()
-        .baseUri(baseUrl)
-        .contentType(ContentType.JSON)
-        .header("x-api-key", "reqres-free-v1")
-        .body(requestBody)
-        .when()
-        .post("/api/users")
-        .then()
-        .statusCode(201)
-        .body("name", equalTo("Test User"))
-        .body("job", equalTo("Automation Tester"))
-        .body("id", notNullValue())
-        .body("createdAt", notNullValue());
-}
-```
+java
+
 
 ## Утилити класове
 
@@ -127,18 +106,6 @@ public void createUserSuccessfullyTest(String env) {
 
 Утилити класът **FileUtils** съдържа метод за четене на файлове като String. Той се използва за зареждане на request тела от JSON файлове.
 
-```java
-public class FileUtils {
-
-    public static String readFileAsString(String filePath) {
-        try {
-            return new String(Files.readAllBytes(Paths.get(filePath)));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read file: " + filePath, e);
-        }
-    }
-}
-```
 
 ## Изисквания
 

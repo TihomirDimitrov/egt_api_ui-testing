@@ -19,7 +19,7 @@ public class BaseApiTest {
     @Parameters({"env"})
     @BeforeClass
     public void setUp(@Optional("dev") String env) {
-        log.info("Running tests with environment: " + env);
+        log.info("Running tests with environmenta: " + env);
 
         Properties properties = new Properties();
         String propertiesFilePath = "src/test/resources/config/" + env + ".properties";

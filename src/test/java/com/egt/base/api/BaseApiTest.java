@@ -12,7 +12,7 @@ import java.util.Properties;
 
 @Slf4j
 @SpringBootTest
-public class BaseApiTest {
+public abstract class BaseApiTest {
     protected String baseUrl;
     protected String baseRequestBodyPath;
     protected String environment;

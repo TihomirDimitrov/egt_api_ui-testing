@@ -1,7 +1,10 @@
 package com.egt.core;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,10 +16,13 @@ public class Browser {
 
     private final WebDriverFactory webDriverFactory;
     private final PageObjectFactory pageObjectFactory;
+    private final WaitPresetRegistry waitPresetRegistry;
 
-    public Browser(WebDriverFactory webDriverFactory, PageObjectFactory pageObjectFactory) {
+    public Browser(WebDriverFactory webDriverFactory, PageObjectFactory pageObjectFactory,
+                   WaitPresetRegistry waitPresetRegistry) {
         this.webDriverFactory = webDriverFactory;
         this.pageObjectFactory = pageObjectFactory;
+        this.waitPresetRegistry = waitPresetRegistry;
     }
 
     public WebDriver getDriver() {
@@ -61,5 +67,15 @@ public class Browser {
             actions = new Actions(getDriver());
         }
         return actions;
+    }
+
+    public FluentWait<WebDriver> wait(String presetName) {
+        return waitPresetRegistry.getWait(presetName, getDriver());
+    }
+
+    public void scrollToElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'nearest'});"
+                , element);
     }
 }

@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateUserApiModel {
-    //В този случай използването на JsonProperty не е задължително, но е добра практика и го демостираме по този начин.
     @JsonProperty("name")
     private String name;
     @JsonProperty("job")
-    private String userJob;
+    private String job;
 }

@@ -14,7 +14,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 @SpringBootTest
-public class BaseUiTest extends AbstractTestNGSpringContextTests {
+public abstract class BaseUiTest extends AbstractTestNGSpringContextTests {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -34,11 +34,12 @@ public class BaseUiTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void setUp() {
-        browser = new Browser(webDriverFactory, pageObjectFactory);
+        browser = new Browser(webDriverFactory, pageObjectFactory, waitPresetRegistry);
     }
 
     @AfterMethod
     public void tearDown() {
+        log.info("Close the browser");
         if (browser != null) {
             browser.close();
         }

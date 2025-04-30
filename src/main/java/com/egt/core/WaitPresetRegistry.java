@@ -8,21 +8,45 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Register for FluentWait, allows to wait in позволяващ централизирано управление на изчакванията.
+ */
 @Component
 public class WaitPresetRegistry {
 
-    private final Map<String, FluentWait<WebDriver>> presets = new HashMap<>();
+    private final Map<String, Duration> timeouts = new HashMap<>();
+    private final Map<String, Duration> intervals = new HashMap<>();
 
     public WaitPresetRegistry() {
-        presets.put("shortWait", createWait(Duration.ofSeconds(5), Duration.ofMillis(500)));
-        presets.put("defaultWait", createWait(Duration.ofSeconds(10), Duration.ofMillis(500)));
-        presets.put("longWait", createWait(Duration.ofSeconds(30), Duration.ofMillis(500)));
+        register("shortWait", Duration.ofSeconds(5), Duration.ofMillis(500));
+        register("defaultWait", Duration.ofSeconds(10), Duration.ofMillis(500));
+        register("longWait", Duration.ofSeconds(30), Duration.ofMillis(500));
     }
 
-    private FluentWait<WebDriver> createWait(Duration timeout, Duration polling) {
-        return new FluentWait<WebDriver>(null)
+    public void register(String name, Duration timeout, Duration interval) {
+        timeouts.put(name, timeout);
+        intervals.put(name, interval);
+    }
+
+    /**
+     * Returns FluentWait instance for particular WebDriver.
+     *
+     * @param waitName Името на пресета
+     * @param driver   WebDriver instance
+     * @return FluentWait instance
+     * @throws IllegalArgumentException
+     */
+    public FluentWait<WebDriver> getWait(String waitName, WebDriver driver) {
+        Duration timeout = timeouts.get(waitName);
+        Duration interval = intervals.get(waitName);
+
+        if (timeout == null || interval == null) {
+            throw new IllegalArgumentException("No such wait preset: " + waitName);
+        }
+
+        return new FluentWait<>(driver)
                 .withTimeout(timeout)
-                .pollingEvery(polling)
+                .pollingEvery(interval)
                 .ignoring(Exception.class);
     }
 }

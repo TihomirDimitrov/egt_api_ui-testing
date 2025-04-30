@@ -2,17 +2,13 @@ package com.egt.pages;
 
 import com.egt.core.Browser;
 import com.egt.core.base.BasePage;
+import com.egt.core.enums.WaitType;
 import com.egt.models.StudentUiModel;
 import io.qameta.allure.Step;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class RegistrationFormPage extends BasePage {
 
@@ -68,11 +64,6 @@ public class RegistrationFormPage extends BasePage {
         super(browser);
     }
 
-    @Override
-    public boolean isOpened() {
-        return firstNameInput.isDisplayed();
-    }
-
     @Step("Fill Registration Form")
     public RegistrationFormPage fillForm(StudentUiModel studentUiModel) {
         firstNameInput.sendKeys(studentUiModel.getFirstName());
@@ -112,21 +103,23 @@ public class RegistrationFormPage extends BasePage {
 
     @Step("Close Modal")
     public void closeModal() {
-        WebDriver driver = getBrowser().getDriver();
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", closeButton);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(closeButton));
-        closeButton.click();
+        getBrowser().scrollToElement(closeButton);
+        this.wait(WaitType.SHORT.getPresetName()).until(ExpectedConditions.elementToBeClickable(closeButton)).click();
     }
 
     @Step("Verify Modal is Closed")
     public boolean isModalClosed() {
-        WebDriver driver = getBrowser().getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
-            return wait.until(ExpectedConditions.invisibilityOf(modalTitle));
+            return wait(WaitType.SHORT.getPresetName()).until(ExpectedConditions.invisibilityOf(modalTitle));
         } catch (Exception e) {
             return true;
         }
+    }
+
+    @Override
+    public boolean isOpened() {
+        return this.wait(WaitType.SHORT.getPresetName())
+                .until(ExpectedConditions.visibilityOf(firstNameInput))
+                .isDisplayed();
     }
 }

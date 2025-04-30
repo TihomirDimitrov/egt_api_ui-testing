@@ -15,10 +15,16 @@ public abstract class BasePage extends Page {
         WebDriver driver = getBrowser().getDriver();
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        js.executeScript(
-                "document.querySelectorAll('iframe, .ad, .ads, .ad-container," +
-                        " [id*=\"ad\"], [class*=\"ad\"], [id*=\"google_ads\"], [class*=\"google_ads\"]')" +
-                        ".forEach(function(el) { el.remove(); });"
-        );
+        String script = """
+                const selectors = [
+                  'iframe', 'ins', '.ad', '.ads', '.ad-container',
+                  '[id*="ad"]', '[class*="ad"]',
+                  '[id^="google_ads"]', '[class^="google_ads"]',
+                  '[class*="amp"]', '[id*="banner"]', '[class*="pen"]', '[style*="z-index"]'
+                ];
+                selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => el.remove()));
+                """;
+
+        js.executeScript(script);
     }
 }

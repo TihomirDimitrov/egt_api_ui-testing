@@ -28,7 +28,7 @@ public class CreateUserTest extends BaseApiTest {
                 .post("/api/users")
                 .then()
                 .statusCode(201)
-                .body("name", equalTo("Test StudentUiModel"))
+                .body("name", equalTo("Test User"))
                 .body("job", equalTo("Automation Tester"))
                 .body("id", notNullValue())
                 .body("createdAt", notNullValue());
@@ -36,7 +36,7 @@ public class CreateUserTest extends BaseApiTest {
 
     @Test
     public void createUserByModelTest() {
-        CreateUserApiModel requestBody = new CreateUserApiModel("Test StudentUiModel", "Automation Tester");
+        CreateUserApiModel requestBody = new CreateUserApiModel("Test User", "Automation Tester");
 
         RestAssured
                 .given()
@@ -48,7 +48,7 @@ public class CreateUserTest extends BaseApiTest {
                 .post("/api/users")
                 .then()
                 .statusCode(201)
-                .body("name", equalTo("Test StudentUiModel"))
+                .body("name", equalTo("Test User"))
                 .body("job", equalTo("Automation Tester"))
                 .body("id", notNullValue())
                 .body("createdAt", notNullValue());

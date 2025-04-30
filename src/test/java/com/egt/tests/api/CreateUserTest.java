@@ -1,12 +1,12 @@
-package tests.api;
+package com.egt.tests.api;
 
-import base.api.BaseApiTest;
+import com.egt.base.api.BaseApiTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
-import models.CreateUserRequest;
+import com.egt.models.CreateUserApiModel;
 import org.testng.annotations.Test;
-import utils.FileUtils;
+import com.egt.utils.FileUtils;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -28,7 +28,7 @@ public class CreateUserTest extends BaseApiTest {
                 .post("/api/users")
                 .then()
                 .statusCode(201)
-                .body("name", equalTo("Test User"))
+                .body("name", equalTo("Test StudentUiModel"))
                 .body("job", equalTo("Automation Tester"))
                 .body("id", notNullValue())
                 .body("createdAt", notNullValue());
@@ -36,7 +36,7 @@ public class CreateUserTest extends BaseApiTest {
 
     @Test
     public void createUserByModelTest() {
-        CreateUserRequest requestBody = new CreateUserRequest("Test User", "Automation Tester");
+        CreateUserApiModel requestBody = new CreateUserApiModel("Test StudentUiModel", "Automation Tester");
 
         RestAssured
                 .given()
@@ -48,7 +48,7 @@ public class CreateUserTest extends BaseApiTest {
                 .post("/api/users")
                 .then()
                 .statusCode(201)
-                .body("name", equalTo("Test User"))
+                .body("name", equalTo("Test StudentUiModel"))
                 .body("job", equalTo("Automation Tester"))
                 .body("id", notNullValue())
                 .body("createdAt", notNullValue());

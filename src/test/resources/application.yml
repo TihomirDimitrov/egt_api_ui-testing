@@ -1,0 +1,20 @@
+#Profile
+spring:
+  codec:
+    max-in-memory-size: 15MB
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+
+# App Urls
+app:
+  egt:
+    navigation:
+      automationPracticeForm: ${app.egt.url}/automation-practice-form
+      homePage: ${app.ms.url}
+
+# Browser configuration
+browser:
+  type: chrome
+  headless: false

@@ -1,6 +1,7 @@
-package base.api;
+package com.egt.base.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -10,7 +11,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Slf4j
-public class BaseApiTest {
+@SpringBootTest
+public abstract class BaseApiTest {
     protected String baseUrl;
     protected String baseRequestBodyPath;
     protected String environment;

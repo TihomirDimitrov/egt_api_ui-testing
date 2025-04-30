@@ -1,11 +1,13 @@
-package utils;
+package com.egt.utils;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 @Slf4j
+@UtilityClass
 public class FileUtils {
 
     public static String readFileAsString(String filePath) {

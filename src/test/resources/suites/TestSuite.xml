@@ -5,7 +5,7 @@
 
     <test name="Create User Test">
         <classes>
-            <class name="tests.api.CreateUserTest"/>
+            <class name="com.egt.tests.api.CreateUserTest"/>
         </classes>
     </test>
 </suite>

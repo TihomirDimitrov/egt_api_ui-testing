@@ -69,25 +69,26 @@ public class RegistrationFormPage extends BasePage {
         firstNameInput.sendKeys(studentUiModel.getFirstName());
         lastNameInput.sendKeys(studentUiModel.getLastName());
         emailInput.sendKeys(studentUiModel.getEmail());
-        maleGenderRadio.click();
-        mobileInput.sendKeys(studentUiModel.getMobile());
-        dateOfBirthInput.sendKeys(Keys.CONTROL + "a");
-        dateOfBirthInput.sendKeys(studentUiModel.getDateOfBirth());
+        smartClick(maleGenderRadio, WaitType.SHORT);
+        smartSendKeys(mobileInput, studentUiModel.getMobile(), WaitType.SHORT);
+        smartSendKeys(dateOfBirthInput, studentUiModel.getDateOfBirth(), WaitType.SHORT);
         dateOfBirthInput.sendKeys(Keys.ENTER);
-        subjectsInput.sendKeys(studentUiModel.getSubject());
+        smartSendKeys(subjectsInput, studentUiModel.getSubject(), WaitType.SHORT);
         subjectsInput.sendKeys(Keys.ENTER);
-        hobbiesSportsCheckbox.click();
-        hobbiesReadingCheckbox.click();
-        currentAddressInput.sendKeys(studentUiModel.getCurrentAddress());
-        stateInput.sendKeys(studentUiModel.getState());
+        smartClick(hobbiesSportsCheckbox, WaitType.SHORT);
+        smartClick(hobbiesReadingCheckbox, WaitType.SHORT);
+        smartSendKeys(currentAddressInput, studentUiModel.getCurrentAddress(), WaitType.SHORT);
+        smartSendKeys(stateInput, studentUiModel.getState(), WaitType.SHORT);
         stateInput.sendKeys(Keys.ENTER);
-        cityInput.sendKeys(studentUiModel.getCity());
+        smartSendKeys(cityInput, studentUiModel.getCity(), WaitType.SHORT);
         cityInput.sendKeys(Keys.ENTER);
+
         return this;
     }
 
     @Step("Click Submit Button")
     public void clickSubmit() {
+        scrollToElementJs(submitButton);
         submitButton.click();
     }
 
@@ -103,14 +104,14 @@ public class RegistrationFormPage extends BasePage {
 
     @Step("Close Modal")
     public void closeModal() {
-        getBrowser().scrollToElement(closeButton);
-        this.wait(WaitType.SHORT.getPresetName()).until(ExpectedConditions.elementToBeClickable(closeButton)).click();
+        scrollToElementJs(closeButton);
+        closeButton.click();
     }
 
     @Step("Verify Modal is Closed")
     public boolean isModalClosed() {
         try {
-            return wait(WaitType.SHORT.getPresetName()).until(ExpectedConditions.invisibilityOf(modalTitle));
+            return wait(WaitType.SHORT).until(ExpectedConditions.invisibilityOf(modalTitle));
         } catch (Exception e) {
             return true;
         }
@@ -118,7 +119,7 @@ public class RegistrationFormPage extends BasePage {
 
     @Override
     public boolean isOpened() {
-        return this.wait(WaitType.SHORT.getPresetName())
+        return this.wait(WaitType.SHORT)
                 .until(ExpectedConditions.visibilityOf(firstNameInput))
                 .isDisplayed();
     }

@@ -1,8 +1,8 @@
 package com.egt.core;
 
+import com.egt.core.enums.WaitType;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.Logger;
@@ -69,13 +69,23 @@ public class Browser {
         return actions;
     }
 
-    public FluentWait<WebDriver> wait(String presetName) {
-        return waitPresetRegistry.getWait(presetName, getDriver());
+    public FluentWait<WebDriver> wait(WaitType waitType) {
+        return waitPresetRegistry.getWait(waitType, getDriver());
     }
 
-    public void scrollToElement(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'nearest'});"
-                , element);
+    public void removeAdsIfPresent() {
+        JavascriptExecutor js = (JavascriptExecutor) DRIVER;
+
+        String script = """
+                const selectors = [
+                  'iframe', 'ins', '.ad', '.ads', '.ad-container',
+                  '[id*="ad"]', '[class*="ad"]',
+                  '[id^="google_ads"]', '[class^="google_ads"]',
+                  '[class*="amp"]', '[id*="banner"]', '[class*="pen"]', '[style*="z-index"]'
+                ];
+                selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => el.remove()));
+                """;
+
+        js.executeScript(script);
     }
 }

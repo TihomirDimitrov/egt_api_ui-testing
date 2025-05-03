@@ -10,13 +10,14 @@ import org.testng.annotations.Test;
 
 public class RegistrationFormTest extends BaseUiTest {
 
-    @Test(description = "Fill and submit registration form")
+    @Test(description = "Fill out and submit registration form")
     public void testSubmitRegistrationForm() {
         RegistrationFormPage formPage = browser.navigateTo(urlConfig.getAutomationPracticeForm(), RegistrationFormPage.class);
         Assertions.assertThat(formPage.isOpened())
                 .as("Registration form page is not opened successfully!").isTrue();
         StudentUiModel studentUiModel = StudentFactory.createRandomStudent();
-        formPage.fillForm(studentUiModel).clickSubmit();
+        formPage.fillForm(studentUiModel)
+                .clickSubmit();
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(formPage.isModalOpened()).as("Modal should be opened").isTrue();

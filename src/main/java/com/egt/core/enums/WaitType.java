@@ -1,17 +1,22 @@
 package com.egt.core.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.Duration;
+
+/**
+ * Enum defining wait types with their associated timeout and polling interval.
+ */
 @Getter
+@AllArgsConstructor
 public enum WaitType {
-    SHORT("shortWait"),
-    DEFAULT("defaultWait"),
-    LONG("longWait");
 
-    private final String presetName;
+    SHORT(Duration.ofSeconds(5), Duration.ofMillis(500)),
+    DEFAULT(Duration.ofSeconds(10), Duration.ofMillis(500)),
+    LONG(Duration.ofSeconds(30), Duration.ofMillis(500));
 
-    WaitType(String presetName) {
-        this.presetName = presetName;
-    }
+    private final Duration timeout;
+    private final Duration interval;
 
 }

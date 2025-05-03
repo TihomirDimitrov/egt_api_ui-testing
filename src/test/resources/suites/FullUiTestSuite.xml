@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Full UI Test Suite " parallel="tests" thread-count="2">
+<!--    <listeners>-->
+<!--        <listener class-name="org.springframework.test.context.testng.AbstractTestNGSpringContextTests"/>-->
+<!--    </listeners>-->
+
+    <test name="Registration Form Tests">
+        <classes>
+            <class name="com.egt.tests.ui.RegistrationFormTest"/>
+        </classes>
+    </test>
+</suite>

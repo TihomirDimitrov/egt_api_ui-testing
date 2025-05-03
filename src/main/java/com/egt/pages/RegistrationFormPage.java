@@ -5,10 +5,15 @@ import com.egt.core.base.BasePage;
 import com.egt.core.enums.WaitType;
 import com.egt.models.StudentUiModel;
 import io.qameta.allure.Step;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import static com.egt.core.enums.WaitType.SHORT;
+import static com.egt.utils.TestUtils.performIf;
+import static com.egt.utils.TestUtils.removeAds;
 
 public class RegistrationFormPage extends BasePage {
 
@@ -68,19 +73,23 @@ public class RegistrationFormPage extends BasePage {
     public RegistrationFormPage fillForm(StudentUiModel studentUiModel) {
         firstNameInput.sendKeys(studentUiModel.getFirstName());
         lastNameInput.sendKeys(studentUiModel.getLastName());
-        emailInput.sendKeys(studentUiModel.getEmail());
-        smartClick(maleGenderRadio, WaitType.SHORT);
-        smartSendKeys(mobileInput, studentUiModel.getMobile(), WaitType.SHORT);
-        smartSendKeys(dateOfBirthInput, studentUiModel.getDateOfBirth(), WaitType.SHORT);
+        smartSendKeys(emailInput, studentUiModel.getEmail(), SHORT);
+        performIf(() -> isElementClickable(maleGenderRadio), () ->
+        {
+            removeAds(getDriver());
+            maleGenderRadio.click();
+        });
+        smartSendKeys(mobileInput, studentUiModel.getMobile(), SHORT);
+        smartSendKeys(dateOfBirthInput, studentUiModel.getDateOfBirth(), SHORT);
         dateOfBirthInput.sendKeys(Keys.ENTER);
-        smartSendKeys(subjectsInput, studentUiModel.getSubject(), WaitType.SHORT);
+        smartSendKeys(subjectsInput, studentUiModel.getSubject(), SHORT);
         subjectsInput.sendKeys(Keys.ENTER);
-        smartClick(hobbiesSportsCheckbox, WaitType.SHORT);
-        smartClick(hobbiesReadingCheckbox, WaitType.SHORT);
-        smartSendKeys(currentAddressInput, studentUiModel.getCurrentAddress(), WaitType.SHORT);
-        smartSendKeys(stateInput, studentUiModel.getState(), WaitType.SHORT);
+        smartClick(hobbiesSportsCheckbox, SHORT);
+        smartClick(hobbiesReadingCheckbox, SHORT);
+        smartSendKeys(currentAddressInput, studentUiModel.getCurrentAddress(), SHORT);
+        smartSendKeys(stateInput, studentUiModel.getState(), SHORT);
         stateInput.sendKeys(Keys.ENTER);
-        smartSendKeys(cityInput, studentUiModel.getCity(), WaitType.SHORT);
+        smartSendKeys(cityInput, studentUiModel.getCity(), SHORT);
         cityInput.sendKeys(Keys.ENTER);
 
         return this;
@@ -89,7 +98,7 @@ public class RegistrationFormPage extends BasePage {
     @Step("Click Submit Button")
     public void clickSubmit() {
         scrollToElementJs(submitButton);
-        submitButton.click();
+        performIf(() -> isElementClickable(submitButton), () -> submitButton.click());
     }
 
     @Step("Check if Modal is Opened")
@@ -104,22 +113,27 @@ public class RegistrationFormPage extends BasePage {
 
     @Step("Close Modal")
     public void closeModal() {
-        scrollToElementJs(closeButton);
+        ((JavascriptExecutor) getDriver())
+                .executeScript("document.getElementById('fixedban')?.remove();");
+
+        scrollToElement(closeButton);
+        wait(WaitType.SHORT).until(ExpectedConditions.elementToBeClickable(closeButton));
         closeButton.click();
     }
+
 
     @Step("Verify Modal is Closed")
     public boolean isModalClosed() {
         try {
-            return wait(WaitType.SHORT).until(ExpectedConditions.invisibilityOf(modalTitle));
+            return wait(SHORT).until(ExpectedConditions.invisibilityOf(modalTitle));
         } catch (Exception e) {
-            return true;
+            return false;
         }
     }
 
     @Override
     public boolean isOpened() {
-        return this.wait(WaitType.SHORT)
+        return this.wait(SHORT)
                 .until(ExpectedConditions.visibilityOf(firstNameInput))
                 .isDisplayed();
     }

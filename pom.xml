@@ -13,6 +13,7 @@
         <maven.compiler.target>20</maven.compiler.target>
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <allure-maven-plugin.version>2.11.2</allure-maven-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <rest-assured.version>5.5.1</rest-assured.version>
         <testng.version>7.11.0</testng.version>
@@ -21,6 +22,11 @@
         <jackson.version>2.19.0</jackson.version>
         <slf4j.version>2.0.17</slf4j.version>
         <logback-classic.version>1.5.18</logback-classic.version>
+        <spring-boot-starter.version>3.4.5</spring-boot-starter.version>
+        <spring-boot-starter-test.version>3.4.5</spring-boot-starter-test.version>
+        <allure-testng.version>2.29.1</allure-testng.version>
+        <javafaker.version>1.0.2</javafaker.version>
+        <selenium-java.version>4.31.0</selenium-java.version>
 
     </properties>
 
@@ -66,19 +72,17 @@
             <version>${logback-classic.version}</version>
             <scope>compile</scope>
         </dependency>
-
-
-        <!-- Spring Boot -->
+        <!-- Spring  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>3.4.5</version>
+            <version>${spring-boot-starter.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>3.4.5</version>
+            <version>${spring-boot-starter-test.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -86,25 +90,23 @@
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
-            <version>2.29.1</version>
+            <version>${allure-testng.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.github.javafaker/javafaker -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
-            <version>1.0.2</version>
+            <version>${javafaker.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.31.0</version>
+            <version>${selenium-java.version}</version>
         </dependency>
     </dependencies>
-
-
 
     <build>
         <plugins>
@@ -123,12 +125,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
-
             <!-- Allure Report Plugin -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
-                <version>2.11.2</version>
+                <version>${allure-maven-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

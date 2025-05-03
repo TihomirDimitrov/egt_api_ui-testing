@@ -1,6 +1,8 @@
 package com.egt.core;
 
 import com.egt.core.enums.WaitType;
+import com.egt.factory.PageObjectFactory;
+import com.egt.factory.WebDriverFactory;
 import com.egt.utils.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;

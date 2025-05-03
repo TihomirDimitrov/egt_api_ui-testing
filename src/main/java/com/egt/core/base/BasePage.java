@@ -4,6 +4,7 @@ import com.egt.core.Browser;
 import com.egt.core.Page;
 import com.egt.core.enums.WaitType;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -60,7 +61,7 @@ public abstract class BasePage extends Page {
      * @param waitType the predefined wait type
      */
     protected void smartClick(WebElement element, WaitType waitType) {
-        scrollToElement(element);
+        scrollToElementJs(element);
         waitUntilElementClickable(element, waitType);
         element.click();
     }
@@ -75,6 +76,23 @@ public abstract class BasePage extends Page {
         scrollToElement(element);
         waitUntilElementClickable(element, waitType);
         element.sendKeys(value);
+    }
+
+    /**
+     * Sends keys to an element in a smart way: scrolls to it, waits until it's clickable,
+     * clears existing content, and then types the provided value.
+     *
+     * @param element the WebElement to interact with
+     * @param value   the text to input
+     * @param waitType wait type (e.g. SHORT, DEFAULT, LONG)
+     */
+    protected void smartSendKeysWithJsClean(WebElement element, String value) {
+        scrollToElement(element);
+        waitUntilElementClickable(element, SHORT);
+        element.click();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].value = '';", element);
+        element.sendKeys(value);
+        element.sendKeys(Keys.ENTER);
     }
 
     /**

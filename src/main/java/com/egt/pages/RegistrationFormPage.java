@@ -4,17 +4,25 @@ import com.egt.core.Browser;
 import com.egt.core.base.BasePage;
 import com.egt.core.enums.WaitType;
 import com.egt.models.StudentUiModel;
+import com.egt.utils.DropdownUtils;
 import io.qameta.allure.Step;
+import lombok.Getter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static com.egt.core.enums.WaitType.SHORT;
 import static com.egt.utils.TestUtils.performIf;
 import static com.egt.utils.TestUtils.removeAds;
 
+@Getter
 public class RegistrationFormPage extends BasePage {
 
     @FindBy(id = "firstName")
@@ -47,8 +55,14 @@ public class RegistrationFormPage extends BasePage {
     @FindBy(id = "currentAddress")
     private WebElement currentAddressInput;
 
+    @FindBy(id = "state")
+    private WebElement stateDropdown;
+
     @FindBy(id = "react-select-3-input")
     private WebElement stateInput;
+
+    @FindBy(id = "city")
+    private WebElement cityDropdown;
 
     @FindBy(id = "react-select-4-input")
     private WebElement cityInput;
@@ -65,6 +79,9 @@ public class RegistrationFormPage extends BasePage {
     @FindBy(id = "closeLargeModal")
     private WebElement closeButton;
 
+    @FindBy(css = "div[id='state'] div[class*='control']")
+    private List<WebElement> options;
+
     public RegistrationFormPage(Browser browser) {
         super(browser);
     }
@@ -79,19 +96,16 @@ public class RegistrationFormPage extends BasePage {
             removeAds(getDriver());
             maleGenderRadio.click();
         });
+        studentUiModel.setGender(maleGenderRadio.getText());
         smartSendKeys(mobileInput, studentUiModel.getMobile(), SHORT);
-        smartSendKeys(dateOfBirthInput, studentUiModel.getDateOfBirth(), SHORT);
-        dateOfBirthInput.sendKeys(Keys.ENTER);
+        smartSendKeysWithJsClean(dateOfBirthInput, studentUiModel.getDateOfBirth());
         smartSendKeys(subjectsInput, studentUiModel.getSubject(), SHORT);
-        subjectsInput.sendKeys(Keys.ENTER);
+        subjectsInput.sendKeys(studentUiModel.getSubject(), Keys.ENTER);
         smartClick(hobbiesSportsCheckbox, SHORT);
         smartClick(hobbiesReadingCheckbox, SHORT);
         smartSendKeys(currentAddressInput, studentUiModel.getCurrentAddress(), SHORT);
-        smartSendKeys(stateInput, studentUiModel.getState(), SHORT);
-        stateInput.sendKeys(Keys.ENTER);
-        smartSendKeys(cityInput, studentUiModel.getCity(), SHORT);
-        cityInput.sendKeys(Keys.ENTER);
-
+        selectRandomState(studentUiModel);
+        selectRandomCity(studentUiModel);
         return this;
     }
 
@@ -129,6 +143,43 @@ public class RegistrationFormPage extends BasePage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private void selectRandomState(StudentUiModel studentUiModel) {
+        smartClick(stateDropdown, SHORT);
+        WebElement selectedOption = DropdownUtils.selectRandomOption(options);
+        studentUiModel.setCity(selectedOption.getText());
+        stateInput.sendKeys(Keys.ENTER);
+    }
+
+    private void selectRandomCity(StudentUiModel studentUiModel) {
+        smartClick(cityDropdown, SHORT);
+        WebElement selectedOption = DropdownUtils.selectFirstOption(options);
+        studentUiModel.setCity(selectedOption.getText());
+        cityInput.sendKeys(Keys.ENTER);
+    }
+
+    @Step("Get table submitted data")
+    public Map<String, String> getSubmittedData() {
+        Map<String, String> dataMap = new HashMap<>();
+        List<WebElement> rows = resultTable.findElements(By.cssSelector("tbody tr"));
+
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+            if (cells.size() == 2) {
+                String label = cells.get(0).getText().trim();
+                String value = cells.get(1).getText().trim();
+                dataMap.put(label, value);
+            }
+        }
+        return dataMap;
+    }
+
+    @Step("Check if field is marked as required (red border)")
+    public boolean isFieldRequired(WebElement element) {
+        scrollToElement(element);
+        String borderColor = element.getCssValue("border-color");
+        return borderColor.equals("rgb(220, 53, 69)");
     }
 
     @Override

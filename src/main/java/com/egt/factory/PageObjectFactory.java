@@ -1,5 +1,7 @@
-package com.egt.core;
+package com.egt.factory;
 
+import com.egt.core.Browser;
+import com.egt.core.Page;
 import com.egt.core.exceptions.PageCreationException;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.stereotype.Component;

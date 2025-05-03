@@ -2,9 +2,9 @@ package com.egt.base.ui;
 
 import com.egt.configuration.UrlConfig;
 import com.egt.core.Browser;
-import com.egt.core.PageObjectFactory;
+import com.egt.factory.PageObjectFactory;
 import com.egt.core.WaitPresetRegistry;
-import com.egt.core.WebDriverFactory;
+import com.egt.factory.WebDriverFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

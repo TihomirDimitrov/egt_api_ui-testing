@@ -26,6 +26,8 @@ public class RegistrationFormTest extends BaseUiTest {
 
         Map<String, String> actualData = formPage.getSubmittedData();
         SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(formPage.isModalOpened()).as("Modal is not opened!").isTrue();
+
             softly.assertThat(actualData.get(STUDENT_NAME.getLabel()))
                     .as("Student verification failed, not expected student name!")
                     .isEqualTo(studentUiModel.getFirstName() + " " + studentUiModel.getLastName());
@@ -64,7 +66,6 @@ public class RegistrationFormTest extends BaseUiTest {
         SoftAssertions.assertSoftly(softly -> softly.assertThat(formPage.isModalClosed())
                 .overridingErrorMessage("Modal should be closed").isTrue());
     }
-
 
     @Test(description = "Submit form without required fields and validate field errors")
     public void testRegistrationFormRequiredFields() {

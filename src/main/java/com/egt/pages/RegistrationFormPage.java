@@ -8,7 +8,6 @@ import com.egt.utils.DropdownUtils;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.egt.core.enums.WaitType.SHORT;
+import static com.egt.utils.JsUtils.removeAds;
+import static com.egt.utils.JsUtils.removeFixedBanner;
 import static com.egt.utils.TestUtils.performIf;
-import static com.egt.utils.TestUtils.removeAds;
 
 @Getter
 public class RegistrationFormPage extends BasePage {
@@ -127,14 +127,11 @@ public class RegistrationFormPage extends BasePage {
 
     @Step("Close Modal")
     public void closeModal() {
-        ((JavascriptExecutor) getDriver())
-                .executeScript("document.getElementById('fixedban')?.remove();");
-
+        removeFixedBanner(getDriver());
         scrollToElement(closeButton);
         wait(WaitType.SHORT).until(ExpectedConditions.elementToBeClickable(closeButton));
         closeButton.click();
     }
-
 
     @Step("Verify Modal is Closed")
     public boolean isModalClosed() {

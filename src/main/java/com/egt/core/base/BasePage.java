@@ -10,6 +10,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.egt.core.enums.WaitType.SHORT;
+import static com.egt.utils.JsUtils.clearInputWithJs;
 
 /**
  * Abstract base class for all page objects.
@@ -84,13 +85,12 @@ public abstract class BasePage extends Page {
      *
      * @param element the WebElement to interact with
      * @param value   the text to input
-     * @param waitType wait type (e.g. SHORT, DEFAULT, LONG)
      */
     protected void smartSendKeysWithJsClean(WebElement element, String value) {
         scrollToElement(element);
         waitUntilElementClickable(element, SHORT);
         element.click();
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].value = '';", element);
+        clearInputWithJs(getDriver(), element);
         element.sendKeys(value);
         element.sendKeys(Keys.ENTER);
     }

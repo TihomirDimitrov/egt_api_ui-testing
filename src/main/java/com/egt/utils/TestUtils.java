@@ -2,25 +2,12 @@ package com.egt.utils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 
 import java.util.function.BooleanSupplier;
 
 @Slf4j
 @UtilityClass
 public class TestUtils {
-    public static void removeAds(WebDriver driver) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-
-        String script = """
-                document.querySelectorAll(
-                    'iframe, .adsbygoogle, .ad-container, .google-ad, .sponsor, .sponsored, .ad-slot, [id^="ad_"], [id^="ads_"], [class^="ad-"], [class*=" ad-"], [class*="-ad "]'
-                ).forEach(el => el.remove());
-                """;
-
-        js.executeScript(script);
-    }
 
     /**
      * Evaluates a condition and executes an action only if the condition is true.
@@ -59,5 +46,4 @@ public class TestUtils {
             elseAction.run();
         }
     }
-
 }

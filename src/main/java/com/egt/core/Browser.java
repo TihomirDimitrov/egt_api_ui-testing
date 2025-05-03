@@ -3,11 +3,12 @@ package com.egt.core;
 import com.egt.core.enums.WaitType;
 import com.egt.factory.PageObjectFactory;
 import com.egt.factory.WebDriverFactory;
-import com.egt.utils.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.egt.utils.JsUtils.removeAds;
 
 /**
  * Manages the WebDriver lifecycle, navigation, and page object creation within the automation framework.
@@ -33,9 +34,9 @@ public class Browser {
     /**
      * Constructs a Browser instance with its required dependencies.
      *
-     * @param webDriverFactory     factory for creating WebDriver instances
-     * @param pageObjectFactory    factory for creating page objects
-     * @param waitPresetRegistry   registry for providing FluentWait configurations
+     * @param webDriverFactory   factory for creating WebDriver instances
+     * @param pageObjectFactory  factory for creating page objects
+     * @param waitPresetRegistry registry for providing FluentWait configurations
      */
     public Browser(WebDriverFactory webDriverFactory, PageObjectFactory pageObjectFactory,
                    WaitPresetRegistry waitPresetRegistry) {
@@ -82,7 +83,7 @@ public class Browser {
      */
     public <T extends Page> T navigateTo(String url, Class<T> pageType) {
         this.getDriver().navigate().to(url);
-        TestUtils.removeAds(getDriver());
+        removeAds(getDriver());
         return this.switchToPage(pageType);
     }
 

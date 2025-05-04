@@ -1,6 +1,7 @@
 package com.egt.utils;
 
 import com.egt.core.exceptions.FileReadException;
+import io.qameta.allure.Allure;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +22,7 @@ public class FileUtils {
      * @throws RuntimeException if reading fails
      */
     public String readFileAsString(String filePath) {
+        Allure.step("Read file as string from path: " + filePath);
         try {
             return Files.readString(Path.of(filePath), StandardCharsets.UTF_8);
         } catch (IOException e) {

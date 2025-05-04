@@ -23,7 +23,6 @@ public abstract class BaseApiTest extends AbstractTestNGSpringContextTests {
         this.baseUrl = config.getBaseUrl();
         this.baseRequestBodyPath = config.getRequestBodyPath();
 
-        // Настройваме RestAssured
         RestAssured.baseURI = baseUrl;
 
         log.info("API Config loaded from Spring profile:");

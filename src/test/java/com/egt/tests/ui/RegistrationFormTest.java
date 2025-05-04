@@ -4,6 +4,9 @@ import com.egt.base.ui.BaseUiTest;
 import com.egt.factory.StudentFactory;
 import com.egt.models.StudentUiModel;
 import com.egt.pages.RegistrationFormPage;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
@@ -11,20 +14,26 @@ import org.testng.annotations.Test;
 import java.util.Map;
 
 import static com.egt.core.enums.SubmissionField.*;
+import static io.qameta.allure.Allure.step;
 
 public class RegistrationFormTest extends BaseUiTest {
-
+    @Severity(SeverityLevel.CRITICAL)
+    @Story("MS-0001 - Create new student form")
     @Test(description = "Fill out and submit registration form")
     public void testSubmitRegistrationForm() {
+        step("Navigate to Registration form page!");
         RegistrationFormPage formPage = browser.navigateTo(urlConfig.getAutomationPracticeForm()
                 , RegistrationFormPage.class);
         Assertions.assertThat(formPage.isOpened())
                 .as("Registration form page is not opened successfully!").isTrue();
+        step("Create new student data!");
         StudentUiModel studentUiModel = StudentFactory.createRandomStudent();
+
         formPage.fillForm(studentUiModel)
                 .clickSubmit();
 
         Map<String, String> actualData = formPage.getSubmittedData();
+
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(formPage.isModalOpened()).as("Modal is not opened!").isTrue();
 
@@ -68,6 +77,8 @@ public class RegistrationFormTest extends BaseUiTest {
     }
 
     @Test(description = "Submit form without required fields and validate field errors")
+    @Severity(SeverityLevel.NORMAL)
+    @Story("MS-0002 - Verify student form required fields")
     public void testRegistrationFormRequiredFields() {
         RegistrationFormPage formPage = browser.navigateTo(urlConfig.getAutomationPracticeForm(), RegistrationFormPage.class);
 

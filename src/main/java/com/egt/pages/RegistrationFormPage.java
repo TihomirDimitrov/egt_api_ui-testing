@@ -5,7 +5,7 @@ import com.egt.core.base.BasePage;
 import com.egt.core.enums.WaitType;
 import com.egt.models.StudentUiModel;
 import com.egt.utils.DropdownUtils;
-import io.qameta.allure.Step;
+import io.qameta.allure.Allure;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -86,8 +86,8 @@ public class RegistrationFormPage extends BasePage {
         super(browser);
     }
 
-    @Step("Fill Registration Form")
     public RegistrationFormPage fillForm(StudentUiModel studentUiModel) {
+        Allure.step("Fill Registration Form");
         firstNameInput.sendKeys(studentUiModel.getFirstName());
         lastNameInput.sendKeys(studentUiModel.getLastName());
         smartSendKeys(emailInput, studentUiModel.getEmail(), SHORT);
@@ -109,32 +109,32 @@ public class RegistrationFormPage extends BasePage {
         return this;
     }
 
-    @Step("Click Submit Button")
     public void clickSubmit() {
+        Allure.step("Click Submit Button");
         scrollToElementJs(submitButton);
         performIf(() -> isElementClickable(submitButton), () -> submitButton.click());
     }
 
-    @Step("Check if Modal is Opened")
     public boolean isModalOpened() {
+        Allure.step("Check if Modal is Opened");
         return modalTitle.isDisplayed();
     }
 
-    @Step("Verify Data in Modal")
     public boolean isSubmittedDataDisplayed(String expectedData) {
+        Allure.step("Verify Data in Modal");
         return resultTable.getText().contains(expectedData);
     }
 
-    @Step("Close Modal")
     public void closeModal() {
+        Allure.step("Close Modal");
         removeFixedBanner(getDriver());
         scrollToElement(closeButton);
         wait(WaitType.SHORT).until(ExpectedConditions.elementToBeClickable(closeButton));
         closeButton.click();
     }
 
-    @Step("Verify Modal is Closed")
     public boolean isModalClosed() {
+        Allure.step("Verify Modal is Closed");
         try {
             return wait(SHORT).until(ExpectedConditions.invisibilityOf(modalTitle));
         } catch (Exception e) {
@@ -143,6 +143,7 @@ public class RegistrationFormPage extends BasePage {
     }
 
     private void selectRandomState(StudentUiModel studentUiModel) {
+        Allure.step("Select random state from dropdown");
         smartClick(stateDropdown, SHORT);
         WebElement selectedOption = DropdownUtils.selectRandomOption(options);
         studentUiModel.setCity(selectedOption.getText());
@@ -150,14 +151,15 @@ public class RegistrationFormPage extends BasePage {
     }
 
     private void selectRandomCity(StudentUiModel studentUiModel) {
+        Allure.step("Select random city from dropdown");
         smartClick(cityDropdown, SHORT);
         WebElement selectedOption = DropdownUtils.selectFirstOption(options);
         studentUiModel.setCity(selectedOption.getText());
         cityInput.sendKeys(Keys.ENTER);
     }
 
-    @Step("Get table submitted data")
     public Map<String, String> getSubmittedData() {
+        Allure.step("Get table submitted data");
         Map<String, String> dataMap = new HashMap<>();
         List<WebElement> rows = resultTable.findElements(By.cssSelector("tbody tr"));
 
@@ -172,8 +174,8 @@ public class RegistrationFormPage extends BasePage {
         return dataMap;
     }
 
-    @Step("Check if field is marked as required (red border)")
     public boolean isFieldRequired(WebElement element) {
+        Allure.step("Check if field is marked as required and cover by red border");
         scrollToElement(element);
         String borderColor = element.getCssValue("border-color");
         return borderColor.equals("rgb(220, 53, 69)");
@@ -181,6 +183,7 @@ public class RegistrationFormPage extends BasePage {
 
     @Override
     public boolean isOpened() {
+        Allure.step("Verify if " + RegistrationFormPage.class.getSimpleName() + " is opened");
         return this.wait(SHORT)
                 .until(ExpectedConditions.visibilityOf(firstNameInput))
                 .isDisplayed();

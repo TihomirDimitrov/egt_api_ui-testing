@@ -18,3 +18,8 @@ app:
 browser:
   type: chrome
   headless: false
+
+# API
+api:
+  base-url: https://reqres.in
+  request-body-path: src/test/resources/requests/

@@ -1,54 +1,33 @@
 package com.egt.base.api;
 
+import com.egt.configuration.ApiTestConfig;
+import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
 
 @Slf4j
 @SpringBootTest
-public abstract class BaseApiTest {
+public abstract class BaseApiTest extends AbstractTestNGSpringContextTests {
+
+    @Autowired
+    private ApiTestConfig config;
+
     protected String baseUrl;
     protected String baseRequestBodyPath;
-    protected String environment;
 
-
-    @Parameters({"env"})
     @BeforeClass
-    public void setUp(@Optional("dev") String env) {
-        log.info("Running tests with environment: " + env);
+    public void setUp() {
+        this.baseUrl = config.getBaseUrl();
+        this.baseRequestBodyPath = config.getRequestBodyPath();
 
-        Properties properties = new Properties();
-        String propertiesFilePath = "src/test/resources/config/" + env + ".properties";
+        // Настройваме RestAssured
+        RestAssured.baseURI = baseUrl;
 
-        try (FileInputStream fileInputStream = new FileInputStream(propertiesFilePath)) {
-            properties.load(fileInputStream);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load properties file: " + propertiesFilePath, e);
-        }
-
-        baseUrl = properties.getProperty("base.url");
-        baseRequestBodyPath = properties.getProperty("request.bodies.path");
-        environment = properties.getProperty("env");
-        log.info("Configuration loaded: baseUrl = " + baseUrl + ", requestBodyPath = " + baseRequestBodyPath + ", environment = " + environment);
-
-        validateProperties();
-    }
-
-    private void validateProperties() {
-        if (baseUrl == null || baseUrl.isEmpty()) {
-            throw new IllegalStateException("Missing property: base.url");
-        }
-        if (baseRequestBodyPath == null || baseRequestBodyPath.isEmpty()) {
-            throw new IllegalStateException("Missing property: request.bodies.path");
-        }
-        if (environment == null || environment.isEmpty()) {
-            throw new IllegalStateException("Missing property: env");
-        }
+        log.info("API Config loaded from Spring profile:");
+        log.info("baseUrl = {}", baseUrl);
+        log.info("requestBodyPath = {}", baseRequestBodyPath);
     }
 }

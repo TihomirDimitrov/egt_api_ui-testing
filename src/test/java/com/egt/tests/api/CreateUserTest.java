@@ -10,6 +10,7 @@ import io.qameta.allure.Story;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -18,16 +19,16 @@ import static org.hamcrest.Matchers.notNullValue;
 @Slf4j
 public class CreateUserTest extends BaseApiTest {
 
-    @Test
+    @Test(dataProvider = "userBodyProvider")
     @Severity(SeverityLevel.BLOCKER)
-    @Story("MS-0003 - Create user via API with json template")
-    public void createUserByTemplateTest() {
-        String requestBody = FileUtils.readFileAsString(baseRequestBodyPath + "createUserRequest.json");
-        Allure.step("Submit request for create new user!");
+    @Story("MS-0003 - Create user via file or model")
+    public void testCreateUserWithVariousSources(Object requestBody, ContentType contentType, String sourceType) {
+        Allure.step("Submit request using body from: " + sourceType);
+
         RestAssured
                 .given()
                 .baseUri(baseUrl)
-                .contentType(ContentType.JSON)
+                .contentType(contentType)
                 .header("x-api-key", "reqres-free-v1")
                 .body(requestBody)
                 .when()
@@ -40,26 +41,15 @@ public class CreateUserTest extends BaseApiTest {
                 .body("createdAt", notNullValue());
     }
 
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @Story("MS-0004 - Create user via API with model")
-    public void createUserByModelTest() {
-        Allure.step("Create user Api Model");
-        CreateUserApiModel requestBody = new CreateUserApiModel("Test User", "Automation Tester");
-        Allure.step("Submit request for create new user!");
-        RestAssured
-                .given()
-                .baseUri(baseUrl)
-                .contentType(ContentType.JSON)
-                .header("x-api-key", "reqres-free-v1")
-                .body(requestBody)
-                .when()
-                .post("/api/users")
-                .then()
-                .statusCode(201)
-                .body("name", equalTo("Test User"))
-                .body("job", equalTo("Automation Tester"))
-                .body("id", notNullValue())
-                .body("createdAt", notNullValue());
+    @DataProvider(name = "userBodyProvider", parallel = true)
+    public Object[][] userBodyProvider() {
+        String fileBody = FileUtils.readFileAsString("src/test/resources/requests/createUserRequest.json");
+
+        CreateUserApiModel modelBody = new CreateUserApiModel("Test User", "Automation Tester");
+
+        return new Object[][]{
+                {fileBody, ContentType.JSON, "json"},
+                {modelBody, ContentType.JSON, "model"}
+        };
     }
 }

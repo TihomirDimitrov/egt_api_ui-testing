@@ -9,6 +9,7 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -19,8 +20,9 @@ import static io.qameta.allure.Allure.step;
 public class RegistrationFormTest extends BaseUiTest {
     @Severity(SeverityLevel.CRITICAL)
     @Story("MS-0001 - Create new student form")
-    @Test(description = "Fill out and submit registration form")
-    public void testSubmitRegistrationForm() {
+    @Test(dataProvider = "users", description = "Fill out and submit registration form")
+    public void testSubmitRegistrationForm(String username) {
+        step("Login as user: " + username);
         step("Navigate to Registration form page!");
         RegistrationFormPage formPage = browser.navigateTo(urlConfig.getAutomationPracticeForm()
                 , RegistrationFormPage.class);
@@ -76,10 +78,12 @@ public class RegistrationFormTest extends BaseUiTest {
                 .overridingErrorMessage("Modal should be closed").isTrue());
     }
 
-    @Test(description = "Submit form without required fields and validate field errors")
     @Severity(SeverityLevel.NORMAL)
     @Story("MS-0002 - Verify student form required fields")
-    public void testRegistrationFormRequiredFields() {
+    @Test(dataProvider = "users",
+            description = "Submit form without required fields and validate field errors")
+    public void testRegistrationFormRequiredFields(String username) {
+        step("Login as user: " + username);
         RegistrationFormPage formPage = browser.navigateTo(urlConfig.getAutomationPracticeForm(), RegistrationFormPage.class);
 
         Assertions.assertThat(formPage.isOpened())
@@ -100,5 +104,13 @@ public class RegistrationFormTest extends BaseUiTest {
             softly.assertThat(formPage.isFieldRequired(formPage.getMaleGenderRadio()))
                     .as("Gender should be marked as required!").isTrue();
         });
+    }
+
+    @DataProvider(name = "users", parallel = true)
+    public Object[][] users() {
+        return new Object[][]{
+                {"admin_user"},
+                {"qa_user"},
+        };
     }
 }

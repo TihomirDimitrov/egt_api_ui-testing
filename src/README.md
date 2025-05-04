@@ -1,122 +1,64 @@
+# EGTproject
 
-# Test Automation Project
+Automation test framework for UI and API validation built with Java, TestNG, RestAssured, Selenium, and Spring Boot.
 
-## Описание
-Този проект е автоматизирани тестове за API, използващи **RestAssured**, **TestNG** и **Java**. Тестовете са организирани в базов клас, който конфигурира основните параметри (като URL и път за request тялото), и в тестови класове, които изпълняват различни сценарии.
+## Project Purpose
 
-## Структура на проекта
+This project provides a modular, maintainable, and scalable automation testing framework for validating both Web UI components and RESTful APIs.
+It includes advanced features like Allure reporting, Spring Boot configuration management, Page Object Model structure, and data-driven test capabilities.
 
-```
-src/
-├── main/
-│   └── java/
-│       └── base/
-│           └── BaseTest.java          # Базов клас за тестовете
-│       └── models/
-│           └── CreateUserRequest.java # Модел за създаване на потребители
-│       └── tests/
-│           └── CreateUserTest.java    # Тест за създаване на потребител
-│       └── utils/
-│           └── FileUtils.java         # Утилити клас за работа с файлове
-└── resources/
-    └── config/
-        └── dev.properties            # Конфигурация за 'dev' среда
-        └── test.properties           # Конфигурация за 'test' среда
-    └── requests/
-        └── createUserRequest.json   # Тестов JSON файл за създаване на потребител
-```
+---
 
-## Инсталация
+## 🚀 Technologies Used
 
-1. Клонирайте репозитория:
+- Java 20
+- Maven
+- TestNG
+- Selenium WebDriver
+- RestAssured
+- Spring Boot
+- Allure Report
+- Lombok
+- AssertJ
+- Logback & SLF4J
+- JavaFaker
 
-   ```bash
-   git clone https://your-repository-url
-   cd your-repository-folder
-   ```
+---
 
-2. Уверете се, че имате инсталиран **Java** и **Maven**.
+## ⚙️ How to Run Tests
 
-3. Инсталирайте зависимостите с Maven:
+### Run All Tests
 
-   ```bash
-   mvn install
-   ```
-
-## Конфигурация
-
-Конфигурацията за средата се извършва чрез **properties** файлове, разположени в директорията `src/test/resources/config/`. Всеки файл е предназначен за различна среда.
-
-Пример за конфигурационни файлове:
-- `dev.properties`
-- `test.properties`
-
-Във всеки от тези файлове са зададени важни параметри като `base.url`, `request.bodies.path`, и `env`.
-
-Пример за съдържанието на `dev.properties`:
-
-```properties
-base.url=https://reqres.in
-request.bodies.path=src/test/resources/requests/
-env=dev
+### Run UI or API Specific Suite
+```bash
+mvn clean test -DsuiteXmlFile=FullUiTestSuite.xml
+mvn clean test -DsuiteXmlFile=FullApiTestSuite.xml
 ```
 
-## Изпълнение на тестовете
+---
 
-### Чрез IntelliJ IDEA
+## 📊 Generate Allure Report
 
-1. Отворете проекта в **IntelliJ IDEA**.
-2. Изпълнете тестовете директно от IDE чрез **TestNG**.
+### 1. After running the tests:
+```bash
+mvn allure:serve
+```
 
-### Чрез Maven
+This command will start a local server and open the Allure report in your browser.
 
-Можете да изпълнявате тестовете чрез командата Maven:
+---
+
+## ✅ Useful Maven Profiles
 
 ```bash
-mvn test -Denv=dev
+mvn test -Pdev     # Run tests with dev profile
+mvn test -Ptest    # Run tests with test profile
 ```
 
-или
+---
 
-```bash
-mvn test -Denv=test
-```
+## ✍️ Author
 
-Параметърът `env` трябва да бъде подаден с командата и да съответства на конфигурационния файл, който искате да използвате.
+Tihomir Dimitrov  
+Test Automation Engineer
 
-## Тестове
-
-### CreateUserTest
-
-Тестът **CreateUserTest** създава потребител чрез API и проверява дали отговорът съдържа очакваните стойности.
-
-Пример за тестовото изпълнение:
-1. Зарежда се request body от JSON файл.
-2. Изпраща се POST заявка към API с данните.
-3. Проверките включват:
-    - Статус код 201.
-    - Проверка на полетата `name`, `job`, `id`, и `createdAt`.
-
-java
-
-
-## Утилити класове
-
-### FileUtils
-
-Утилити класът **FileUtils** съдържа метод за четене на файлове като String. Той се използва за зареждане на request тела от JSON файлове.
-
-
-## Изисквания
-
-- **Java** 11 или по-нова версия.
-- **Maven** за управление на зависимостите.
-- **TestNG** за изпълнение на тестовете.
-
-## Лиценз
-
-Този проект е с отворен код и се разпространява под **MIT License**.
-
-## Проблеми и поддръжка
-
-Ако срещнете проблеми или имате въпроси, моля, отворете **issue** в GitHub репозитория или се свържете с мен на [email@example.com].
